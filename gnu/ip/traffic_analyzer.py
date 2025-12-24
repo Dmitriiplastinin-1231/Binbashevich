@@ -24,6 +24,17 @@ class TrafficAnalyzer:
         self.PORT_SCAN_THRESHOLD = 10  # Количество портов для определения сканирования
         self.CONNECTION_THRESHOLD = 50  # Максимальное количество соединений в минуту
         self.RESET_INTERVAL = 60  # Интервал сброса счетчиков (секунды)
+
+        # Флаги активных правил (управляются из GUI)
+        self.active_rules = {
+            "large_packets": True,
+            "port_scan": True,
+            "connection_limit": True,
+            "syn_flood": True,
+            "icmp_flood": True,
+            "udp_flood": True,
+            "suspicious_ports": True,
+        }
         
     def reset_counters(self):
         """Сбрасывает счетчики по истечении интервала."""
@@ -54,7 +65,7 @@ class TrafficAnalyzer:
         packet_size = len(packet)
         
         # Проверка размера пакета
-        if packet_size > self.MAX_PACKET_SIZE:
+        if self.active_rules.get("large_packets", True) and packet_size > self.MAX_PACKET_SIZE:
             return True, "Аномально большой пакет", {
                 "src_ip": src_ip,
                 "dst_ip": dst_ip,
@@ -66,8 +77,8 @@ class TrafficAnalyzer:
         if packet.haslayer(TCP):
             dst_port = packet[TCP].dport
             self.port_scan_attempts[src_ip].add(dst_port)
-            
-            if len(self.port_scan_attempts[src_ip]) > self.PORT_SCAN_THRESHOLD:
+
+            if self.active_rules.get("port_scan", True) and len(self.port_scan_attempts[src_ip]) > self.PORT_SCAN_THRESHOLD:
                 return True, "Обнаружено сканирование портов", {
                     "src_ip": src_ip,
                     "scanned_ports": len(self.port_scan_attempts[src_ip]),
@@ -76,7 +87,7 @@ class TrafficAnalyzer:
         
         # Проверка количества соединений
         self.connection_count[src_ip] += 1
-        if self.connection_count[src_ip] > self.CONNECTION_THRESHOLD:
+        if self.active_rules.get("connection_limit", True) and self.connection_count[src_ip] > self.CONNECTION_THRESHOLD:
             return True, "Превышен лимит соединений", {
                 "src_ip": src_ip,
                 "connections": self.connection_count[src_ip],
@@ -87,7 +98,7 @@ class TrafficAnalyzer:
         if packet.haslayer(TCP):
             if packet[TCP].flags == "S":  # SYN флаг
                 self.connection_count[f"{src_ip}_syn"] += 1
-                if self.connection_count[f"{src_ip}_syn"] > 30:
+                if self.active_rules.get("syn_flood", True) and self.connection_count[f"{src_ip}_syn"] > 30:
                     return True, "Возможная SYN flood атака", {
                         "src_ip": src_ip,
                         "syn_packets": self.connection_count[f"{src_ip}_syn"],
@@ -97,7 +108,7 @@ class TrafficAnalyzer:
         # Проверка ICMP flood
         if packet.haslayer(ICMP):
             self.connection_count[f"{src_ip}_icmp"] += 1
-            if self.connection_count[f"{src_ip}_icmp"] > 40:
+            if self.active_rules.get("icmp_flood", True) and self.connection_count[f"{src_ip}_icmp"] > 40:
                 return True, "Возможная ICMP flood атака", {
                     "src_ip": src_ip,
                     "icmp_packets": self.connection_count[f"{src_ip}_icmp"],
@@ -107,7 +118,7 @@ class TrafficAnalyzer:
         # Проверка UDP flood
         if packet.haslayer(UDP):
             self.connection_count[f"{src_ip}_udp"] += 1
-            if self.connection_count[f"{src_ip}_udp"] > 50:
+            if self.active_rules.get("udp_flood", True) and self.connection_count[f"{src_ip}_udp"] > 50:
                 return True, "Возможная UDP flood атака", {
                     "src_ip": src_ip,
                     "udp_packets": self.connection_count[f"{src_ip}_udp"],
