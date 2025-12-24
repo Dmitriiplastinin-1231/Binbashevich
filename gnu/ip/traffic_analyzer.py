@@ -20,7 +20,7 @@ class TrafficAnalyzer:
         self.last_reset = time.time()
         
         # Настройки правил обнаружения
-        self.MAX_PACKET_SIZE = 10000  # Максимальный размер пакета в байтах
+        self.MAX_PACKET_SIZE = 4000  # Максимальный размер пакета в байтах (повышенная чувствительность)
         self.PORT_SCAN_THRESHOLD = 10  # Количество портов для определения сканирования
         self.CONNECTION_THRESHOLD = 50  # Максимальное количество соединений в минуту
         self.RESET_INTERVAL = 60  # Интервал сброса счетчиков (секунды)

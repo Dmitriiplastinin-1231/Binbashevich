@@ -2,12 +2,18 @@
 Современный графический интерфейс для мониторинга сетевого трафика.
 """
 
+import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 import logging
 from datetime import datetime
 import json
-from collections import deque
+from collections import deque, Counter
+
+import matplotlib
+
+matplotlib.use("Agg")  # Без отображения окон при сохранении графиков
+import matplotlib.pyplot as plt
 
 from traffic_analyzer import TrafficAnalyzer
 from firewall_manager import FirewallManager
@@ -31,6 +37,7 @@ class ModernTrafficMonitorGUI:
             self.firewall,
             callback=self.on_packet_event
         )
+        self.threat_events = deque(maxlen=500)
         
         self.setup_logging()
         self.create_modern_interface()
@@ -169,7 +176,7 @@ class ModernTrafficMonitorGUI:
         
         # Поля настроек
         self.create_dropdown_field(control_card, "Интерфейс:", "interface_var", self.get_network_interfaces())
-        self.create_input_field(control_card, "BPF Фильтр:", "filter_var", "")
+        self.create_dropdown_field(control_card, "BPF Фильтр:", "filter_var", self.get_bpf_presets(), allow_custom=True)
         
         # Правила обнаружения
         rules_label = tk.Label(
@@ -224,6 +231,13 @@ class ModernTrafficMonitorGUI:
             self.clear_logs,
             '#6366f1'
         ).pack(side=tk.LEFT, expand=True, fill=tk.X, padx=(0, 5))
+
+        self.create_action_button(
+            btn_frame,
+            "📑 ОТЧЕТ",
+            self.generate_report,
+            '#3b82f6'
+        ).pack(side=tk.LEFT, expand=True, fill=tk.X, padx=5)
         
         self.create_action_button(
             btn_frame,
@@ -334,7 +348,7 @@ class ModernTrafficMonitorGUI:
         )
         entry.pack(fill=tk.X, ipady=8, ipadx=10)
     
-    def create_dropdown_field(self, parent, label, var_name, values):
+    def create_dropdown_field(self, parent, label, var_name, values, allow_custom=False):
         """Создает выпадающий список."""
         frame = tk.Frame(parent, bg='#1a1f3a')
         frame.pack(fill=tk.X, pady=(0, 10))
@@ -354,7 +368,7 @@ class ModernTrafficMonitorGUI:
             frame,
             textvariable=var,
             values=values,
-            state='readonly',
+            state='normal' if allow_custom else 'readonly',
             font=('Arial', 10)
         )
         dropdown.pack(fill=tk.X, ipady=5)
@@ -366,6 +380,23 @@ class ModernTrafficMonitorGUI:
                        background='#1a1f3a',
                        foreground='#e2e8f0',
                        arrowcolor='#3b82f6')
+
+    def get_bpf_presets(self):
+        """Возвращает список типовых BPF фильтров."""
+        return [
+            "",
+            "tcp",
+            "udp",
+            "icmp",
+            "tcp port 80",
+            "tcp port 443",
+            "udp port 53",
+            "port 22",
+            "host 192.168.0.10",
+            "net 192.168.0.0/16",
+            "not port 22",
+            "tcp port 80 or tcp port 443"
+        ]
     
     def get_network_interfaces(self):
         """Получает список сетевых интерфейсов."""
@@ -542,11 +573,53 @@ class ModernTrafficMonitorGUI:
         message += f"  └─ IP: {src_ip}\n\n"
         
         self.events_text.insert("1.0", message)
+        self.threat_events.append({
+            "timestamp": timestamp,
+            "reason": reason,
+            "src_ip": src_ip
+        })
         
         # Ограничиваем размер
         lines = int(self.events_text.index('end-1c').split('.')[0])
         if lines > 200:
             self.events_text.delete("200.0", tk.END)
+
+    def generate_report(self):
+        """Создает отчет и диаграмму по критическим событиям."""
+        if not self.threat_events:
+            messagebox.showinfo("Отчет", "Нет данных для отчета")
+            return
+
+        report_dir = os.path.join(os.path.dirname(__file__), "reports")
+        os.makedirs(report_dir, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # Сохранение событий в JSON
+        events_list = list(self.threat_events)
+        json_path = os.path.join(report_dir, f"report_{timestamp}_events.json")
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(events_list, f, ensure_ascii=False, indent=2)
+
+        # Построение диаграммы по типам угроз
+        counts = Counter(event["reason"] for event in events_list)
+        chart_path = os.path.join(report_dir, f"report_{timestamp}_chart.png")
+
+        plt.figure(figsize=(6, 4))
+        reasons = list(counts.keys())
+        values = list(counts.values())
+        plt.bar(reasons, values, color="#ef4444")
+        plt.title("Распределение угроз по типам")
+        plt.ylabel("Количество")
+        plt.xticks(rotation=20, ha="right")
+        plt.tight_layout()
+        plt.savefig(chart_path, dpi=150)
+        plt.close()
+
+        self.log_message(f"Отчет сохранен: {os.path.basename(json_path)}", "success")
+        messagebox.showinfo(
+            "Отчет создан",
+            f"JSON: {json_path}\nДиаграмма: {chart_path}"
+        )
     
     def log_message(self, message, level="info"):
         """Логирует сообщение."""
