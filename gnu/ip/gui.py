@@ -1,5 +1,5 @@
 """
-Современный графический интерфейс с продвинутой визуализацией.
+Современный графический интерфейс для мониторинга сетевого трафика.
 """
 
 import tkinter as tk
@@ -164,14 +164,7 @@ class ModernTrafficMonitorGUI:
         self.create_input_field(control_card, "Интерфейс:", "interface_var", "any")
         self.create_input_field(control_card, "BPF Фильтр:", "filter_var", "")
         
-        # Дополнительные кнопки
-        btn_frame = tk.Frame(control_card, bg='#1a1f3a')
-        btn_frame.pack(fill=tk.X, pady=(10, 0))
-        
-        self.create_action_button(
-            btn_frame,
-            "🗑️ ОЧИСТИТЬ",
-          Правила обнаружения
+        # Правила обнаружения
         rules_label = tk.Label(
             control_card,
             text="ПРАВИЛА ОБНАРУЖЕНИЯ:",
@@ -214,7 +207,14 @@ class ModernTrafficMonitorGUI:
             )
             cb.pack(anchor=tk.W, padx=5)
         
-        #   self.clear_logs,
+        # Дополнительные кнопки
+        btn_frame = tk.Frame(control_card, bg='#1a1f3a')
+        btn_frame.pack(fill=tk.X, pady=(10, 0))
+        
+        self.create_action_button(
+            btn_frame,
+            "🗑️ ОЧИСТИТЬ",
+            self.clear_logs,
             '#6366f1'
         ).pack(side=tk.LEFT, expand=True, fill=tk.X, padx=(0, 5))
         
@@ -322,7 +322,50 @@ class ModernTrafficMonitorGUI:
             bd=0,
             insertbackground='#3b82f6'
         )
-        toggle_rule(self, rule_key):
+        entry.pack(fill=tk.X, ipady=8, ipadx=10)
+        
+    def create_action_button(self, parent, text, command, color):
+        """Создает кнопку действия."""
+        return tk.Button(
+            parent,
+            text=text,
+            command=command,
+            bg=color,
+            fg='white',
+            font=('Arial', 9, 'bold'),
+            relief=tk.FLAT,
+            bd=0,
+            padx=10,
+            pady=8,
+            cursor="hand2",
+            activebackground=color
+        )
+        
+    def create_stat_item(self, parent, label, value, color, key):
+        """Создает элемент статистики."""
+        frame = tk.Frame(parent, bg='#0a0e27', relief=tk.FLAT, bd=0)
+        frame.pack(fill=tk.X, pady=(0, 10))
+        
+        tk.Label(
+            frame,
+            text=label,
+            bg='#0a0e27',
+            fg='#94a3b8',
+            font=('Arial', 9)
+        ).pack(side=tk.LEFT, padx=10, pady=8)
+        
+        value_label = tk.Label(
+            frame,
+            text=value,
+            bg='#0a0e27',
+            fg=color,
+            font=('Arial', 14, 'bold')
+        )
+        value_label.pack(side=tk.RIGHT, padx=10, pady=8)
+        
+        self.stat_widgets[key] = value_label
+        
+    def toggle_rule(self, rule_key):
         """Переключает правило обнаружения."""
         enabled = self.detection_rules[rule_key].get()
         status = "активировано" if enabled else "деактивировано"
@@ -339,49 +382,6 @@ class ModernTrafficMonitorGUI:
         }
         # Здесь можно передать правила в analyzer
         self.analyzer.active_rules = active_rules
-            frame,
-            text=value,
-            bg='#0a0e27',
-            fg=color,
-            font=('Arial', 14, 'bold')
-        )
-        value_label.pack(side=tk.RIGHT, padx=10, pady=8)
-        
-        self.stat_widgets[key] = value_label
-        
-    def create_graphs_panel(self, parent):
-        """Создает панель с графиками."""
-        
-        # Верхний график - трафик
-        traffic_card = self.create_card(parent, "📈 МОНИТОРИНГ ТРАФИКА")
-        
-        self.fig_traffic = Figure(figsize=(8, 3), facecolor='#1a1f3a')
-        self.ax_traffic = self.fig_traffic.add_subplot(111, facecolor='#0a0e27')
-        self.setup_graph(self.ax_traffic, "Пакеты/сек", '#3b82f6')
-        
-        self.canvas_traffic = FigureCanvasTkAgg(self.fig_traffic, traffic_card)
-        self.canvas_traffic.get_tk_widget().pack(fill=tk.BOTH, expand=True)
-        
-        # Нижний график - угрозы
-        threats_card = self.create_card(parent, "⚠️ ОБНАРУЖЕНИЕ УГРОЗ")
-        
-        self.fig_threats = Figure(figsize=(8, 3), facecolor='#1a1f3a')
-        self.ax_threats = self.fig_threats.add_subplot(111, facecolor='#0a0e27')
-        self.setup_graph(self.ax_threats, "Угрозы", '#ef4444')
-        
-        self.canvas_threats = FigureCanvasTkAgg(self.fig_threats, threats_card)
-        self.canvas_threats.get_tk_widget().pack(fill=tk.BOTH, expand=True)
-        
-    def setup_graph(self, ax, ylabel, color):
-        """Настраивает график."""
-        ax.set_ylabel(ylabel, color='#94a3b8', fontsize=9)
-        ax.set_xlabel('Время', color='#94a3b8', fontsize=9)
-        ax.tick_params(colors='#94a3b8', labelsize=8)
-        ax.spines['bottom'].set_color('#334155')
-        ax.spines['top'].set_color('#334155')
-        ax.spines['left'].set_color('#334155')
-        ax.spines['right'].set_color('#334155')
-        ax.grid(True, alpha=0.1, color='#334155')
         
     def create_events_panel(self, parent):
         """Создает панель событий."""
@@ -419,13 +419,6 @@ class ModernTrafficMonitorGUI:
             selectbackground='#3b82f6'
         )
         self.logs_text.pack(fill=tk.BOTH, expand=True)
-        
-    def setup_graphs(self):
-        """Инициализирует графики."""
-        for _ in range(100):
-            self.packet_history.append(0)
-            self.threat_history.append(0)
-            self.time_labels.append("")
     
     def toggle_monitoring(self):
         """Переключает мониторинг."""
@@ -435,6 +428,13 @@ class ModernTrafficMonitorGUI:
             self.start_monitoring()
     
     def start_monitoring(self):
+        """Запускает мониторинг."""
+        interface = self.interface_var.get() if self.interface_var.get() != "any" else None
+        filter_str = self.filter_var.get() if self.filter_var.get() else None
+        
+        try:
+            self.monitor.start_monitoring(interface, filter_str)
+            self.start_btn.configure(
                 text="⏸ ОСТАНОВИТЬ ЗАЩИТУ",
                 bg='#ef4444',
                 activebackground='#dc2626'
@@ -460,13 +460,13 @@ class ModernTrafficMonitorGUI:
         """Обработчик событий."""
         if event_type == "suspicious":
             self.log_threat(data)
-            self.threat_history.append(self.threat_history[-1] + 1)
         
         self.root.after(0, self.update_interface)
     
     def log_threat(self, data):
         """Логирует угрозу."""
         timestamp = datetime.now().strftime("%H:%M:%S")
+        reason = data.get("reason", "Unknown")
         details = data.get("details", {})
         src_ip = details.get("src_ip", "N/A")
         
@@ -503,21 +503,21 @@ class ModernTrafficMonitorGUI:
         self.stat_widgets["threats"].configure(text=str(stats["suspicious_packets"]))
         self.stat_widgets["blocked"].configure(text=str(stats["blocked_ips"]))
         
-        # Обновляем графики
-        self.packet_history.append(stats["total_packets"])
-        self.time_labels.append(datetime.now().strftime("%H:%M:%S"))
-        
-        self.update_graphs()
         self.update_blocked_list()
         
         # Повторяем обновление
-        update_graphs(self):
-        """Обновляет графики."""
-        # График трафика
-        self.ax_traffic.clear()
-        self.setup_graph(self.ax_traffic, "Пакеты", '#3b82f6')
-        self.ax_traffic.plot(list(self.packet_history), color='#3b82f6', linewidth=2)
-        self.axson = info.get("reason", "N/A")[:20]
+        if self.monitor.is_running:
+            self.root.after(1000, self.update_interface)
+        else:
+            self.root.after(2000, self.update_interface)
+    
+    def update_blocked_list(self):
+        """Обновляет список блокировок."""
+        self.blocked_list.delete(0, tk.END)
+        blocked_ips = self.firewall.get_blocked_list()
+        
+        for ip, info in blocked_ips.items():
+            reason = info.get("reason", "N/A")[:20]
             timestamp = info.get("timestamp", "N/A")[11:19]
             self.blocked_list.insert(tk.END, f"[{timestamp}] {ip} | {reason}")
     
