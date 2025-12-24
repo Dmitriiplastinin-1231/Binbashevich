@@ -20,7 +20,7 @@ class ModernTrafficMonitorGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("🛡️ Network Guardian - Система защиты сети")
-        self.root.geometry("1000x800")
+        self.root.geometry("1300x800")
         self.root.configure(bg="#0a0e27")
         
         # Инициализация компонентов
@@ -53,16 +53,23 @@ class ModernTrafficMonitorGUI:
         # Верхняя панель - заголовок и статус
         self.create_header()
         
-        # Главный контейнер с двумя колонками
+        # Главный контейнер с тремя колонками
         main_frame = tk.Frame(self.root, bg="#0a0e27")
         main_frame.pack(fill=tk.BOTH, expand=True, padx=15, pady=10)
         
-        # Левая панель - контроль и статистика
-        left_panel = tk.Frame(main_frame, bg="#0a0e27", width=480)
+        # Левая панель - управление
+        left_panel = tk.Frame(main_frame, bg="#0a0e27", width=380)
         left_panel.pack(side=tk.LEFT, fill=tk.BOTH, padx=(0, 10))
         left_panel.pack_propagate(False)
         
-        self.create_control_cards(left_panel)
+        self.create_control_panel(left_panel)
+        
+        # Центральная панель - статистика и блокировки
+        center_panel = tk.Frame(main_frame, bg="#0a0e27", width=340)
+        center_panel.pack(side=tk.LEFT, fill=tk.BOTH, padx=(0, 10))
+        center_panel.pack_propagate(False)
+        
+        self.create_stats_panel(center_panel)
         
         # Правая панель - события и логи
         right_panel = tk.Frame(main_frame, bg="#0a0e27")
@@ -137,8 +144,8 @@ class ModernTrafficMonitorGUI:
         )
         self.time_label.pack(anchor=tk.E)
         
-    def create_control_cards(self, parent):
-        """Создает карточки управления."""
+    def create_control_panel(self, parent):
+        """Создает панель управления."""
         
         # Карточка управления
         control_card = self.create_card(parent, "⚙️ УПРАВЛЕНИЕ")
@@ -161,7 +168,7 @@ class ModernTrafficMonitorGUI:
         self.start_btn.pack(fill=tk.X, pady=(0, 15))
         
         # Поля настроек
-        self.create_input_field(control_card, "Интерфейс:", "interface_var", "any")
+        self.create_dropdown_field(control_card, "Интерфейс:", "interface_var", self.get_network_interfaces())
         self.create_input_field(control_card, "BPF Фильтр:", "filter_var", "")
         
         # Правила обнаружения
@@ -224,6 +231,9 @@ class ModernTrafficMonitorGUI:
             self.clear_all_blocks,
             '#ef4444'
         ).pack(side=tk.RIGHT, expand=True, fill=tk.X, padx=(5, 0))
+    
+    def create_stats_panel(self, parent):
+        """Создает панель статистики и блокировок."""
         
         # Карточка статистики
         stats_card = self.create_card(parent, "📊 СТАТИСТИКА")
@@ -323,6 +333,64 @@ class ModernTrafficMonitorGUI:
             insertbackground='#3b82f6'
         )
         entry.pack(fill=tk.X, ipady=8, ipadx=10)
+    
+    def create_dropdown_field(self, parent, label, var_name, values):
+        """Создает выпадающий список."""
+        frame = tk.Frame(parent, bg='#1a1f3a')
+        frame.pack(fill=tk.X, pady=(0, 10))
+        
+        tk.Label(
+            frame,
+            text=label,
+            bg='#1a1f3a',
+            fg='#94a3b8',
+            font=('Arial', 9)
+        ).pack(anchor=tk.W, pady=(0, 5))
+        
+        var = tk.StringVar(value=values[0] if values else "any")
+        setattr(self, var_name, var)
+        
+        dropdown = ttk.Combobox(
+            frame,
+            textvariable=var,
+            values=values,
+            state='readonly',
+            font=('Arial', 10)
+        )
+        dropdown.pack(fill=tk.X, ipady=5)
+        
+        # Настройка стиля combobox
+        style = ttk.Style()
+        style.configure('TCombobox', 
+                       fieldbackground='#0a0e27',
+                       background='#1a1f3a',
+                       foreground='#e2e8f0',
+                       arrowcolor='#3b82f6')
+    
+    def get_network_interfaces(self):
+        """Получает список сетевых интерфейсов."""
+        try:
+            import subprocess
+            result = subprocess.run(
+                ['ip', 'link', 'show'],
+                capture_output=True,
+                text=True,
+                timeout=2
+            )
+            interfaces = ['any']  # По умолчанию добавляем 'any'
+            
+            for line in result.stdout.split('\n'):
+                if ': ' in line and not line.startswith(' '):
+                    parts = line.split(': ')
+                    if len(parts) >= 2:
+                        iface = parts[1].split('@')[0]
+                        if iface and iface != 'lo':  # Исключаем loopback
+                            interfaces.append(iface)
+            
+            return interfaces if len(interfaces) > 1 else ['any', 'eth0', 'wlan0']
+        except Exception as e:
+            self.logger.warning(f"Не удалось получить интерфейсы: {e}")
+            return ['any', 'eth0', 'wlan0', 'lo']
         
     def create_action_button(self, parent, text, command, color):
         """Создает кнопку действия."""
