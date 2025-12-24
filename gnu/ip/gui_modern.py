@@ -349,7 +349,7 @@ class ModernTrafficMonitorGUI:
         self.ax_traffic = self.fig_traffic.add_subplot(111, facecolor='#0a0e27')
         self.setup_graph(self.ax_traffic, "Пакеты/сек", '#3b82f6')
         
-        self.canvas_traffic = FigureCanvasTkAGG(self.fig_traffic, traffic_card)
+        self.canvas_traffic = FigureCanvasTkAgg(self.fig_traffic, traffic_card)
         self.canvas_traffic.get_tk_widget().pack(fill=tk.BOTH, expand=True)
         
         # Нижний график - угрозы
@@ -359,7 +359,7 @@ class ModernTrafficMonitorGUI:
         self.ax_threats = self.fig_threats.add_subplot(111, facecolor='#0a0e27')
         self.setup_graph(self.ax_threats, "Угрозы", '#ef4444')
         
-        self.canvas_threats = FigureCanvasTkAGG(self.fig_threats, threats_card)
+        self.canvas_threats = FigureCanvasTkAgg(self.fig_threats, threats_card)
         self.canvas_threats.get_tk_widget().pack(fill=tk.BOTH, expand=True)
         
     def setup_graph(self, ax, ylabel, color):
