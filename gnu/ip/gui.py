@@ -1,26 +1,27 @@
 """
-Графический интерфейс для системы обнаружения и блокировки сетевого трафика.
+Современный графический интерфейс с продвинутой визуализацией.
 """
 
 import tkinter as tk
-from tkinter import ttk, scrolledtext, messagebox
+from tkinter import ttk, messagebox
 import logging
 from datetime import datetime
 import json
+from collections import deque
 
 from traffic_analyzer import TrafficAnalyzer
 from firewall_manager import FirewallManager
 from traffic_monitor import TrafficMonitor
 
 
-class TrafficMonitorGUI:
-    """Графический интерфейс для мониторинга трафика."""
+class ModernTrafficMonitorGUI:
+    """Современный графический интерфейс для мониторинга трафика."""
     
     def __init__(self, root):
         self.root = root
-        self.root.title("🛡️ Система обнаружения и блокировки сетевого трафика")
-        self.root.geometry("1200x800")
-        self.root.configure(bg="#1e293b")
+        self.root.title("🛡️ Network Guardian - Система защиты сети")
+        self.root.geometry("1000x800")
+        self.root.configure(bg="#0a0e27")
         
         # Инициализация компонентов
         self.analyzer = TrafficAnalyzer()
@@ -31,14 +32,9 @@ class TrafficMonitorGUI:
             callback=self.on_packet_event
         )
         
-        # Настройка логирования
         self.setup_logging()
-        
-        # Создание интерфейса
-        self.create_widgets()
-        
-        # Обновление статистики
-        self.update_statistics()
+        self.create_modern_interface()
+        self.update_interface()
         
     def setup_logging(self):
         """Настройка логирования."""
@@ -48,198 +44,389 @@ class TrafficMonitorGUI:
         )
         self.logger = logging.getLogger(__name__)
         
-    def create_widgets(self):
-        """Создает виджеты интерфейса."""
+    def create_modern_interface(self):
+        """Создает современный интерфейс."""
         
-        # Стили
-        style = ttk.Style()
-        style.theme_use('clam')
-        style.configure('TFrame', background='#1e293b')
-        style.configure('TLabel', background='#1e293b', foreground='#e2e8f0', font=('Arial', 10))
-        style.configure('Title.TLabel', font=('Arial', 14, 'bold'), foreground='#a5b4fc')
-        style.configure('TButton', font=('Arial', 10, 'bold'))
+        # Настройка стилей
+        self.setup_styles()
         
-        # Заголовок
-        header_frame = ttk.Frame(self.root)
-        header_frame.pack(fill=tk.X, padx=10, pady=10)
+        # Верхняя панель - заголовок и статус
+        self.create_header()
         
-        ttk.Label(
-            header_frame,
-            text="🛡️ Система обнаружения и блокировки подозрительного трафика",
-            style='Title.TLabel'
-        ).pack()
+        # Главный контейнер с двумя колонками
+        main_frame = tk.Frame(self.root, bg="#0a0e27")
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=15, pady=10)
         
-        # Основной контейнер
-        main_container = ttk.Frame(self.root)
-        main_container.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+        # Левая панель - контроль и статистика
+        left_panel = tk.Frame(main_frame, bg="#0a0e27", width=480)
+        left_panel.pack(side=tk.LEFT, fill=tk.BOTH, padx=(0, 10))
+        left_panel.pack_propagate(False)
         
-        # Левая панель - управление и статистика
-        left_panel = ttk.Frame(main_container)
-        left_panel.pack(side=tk.LEFT, fill=tk.BOTH, expand=False, padx=(0, 5))
+        self.create_control_cards(left_panel)
         
-        # Панель управления
-        self.create_control_panel(left_panel)
+        # Правая панель - события и логи
+        right_panel = tk.Frame(main_frame, bg="#0a0e27")
+        right_panel.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
-        # Статистика
-        self.create_statistics_panel(left_panel)
-        
-        # Заблокированные IP
-        self.create_blocked_ips_panel(left_panel)
-        
-        # Правая панель - логи и события
-        right_panel = ttk.Frame(main_container)
-        right_panel.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
-        
-        # События
         self.create_events_panel(right_panel)
         
-        # Логи
-        self.create_logs_panel(right_panel)
+    def setup_styles(self):
+        """Настройка современных стилей."""
+        style = ttk.Style()
+        style.theme_use('clam')
         
-    def create_control_panel(self, parent):
-        """Создает панель управления."""
-        frame = ttk.LabelFrame(parent, text="⚙️ Управление", padding=10)
-        frame.pack(fill=tk.X, pady=(0, 10))
+        # Цвета
+        self.colors = {
+            'bg_dark': '#0a0e27',
+            'bg_card': '#1a1f3a',
+            'bg_card_hover': '#242947',
+            'accent_blue': '#3b82f6',
+            'accent_purple': '#8b5cf6',
+            'accent_green': '#10b981',
+            'accent_red': '#ef4444',
+            'accent_yellow': '#f59e0b',
+            'text_light': '#e2e8f0',
+            'text_muted': '#94a3b8',
+            'border': '#334155'
+        }
         
-        # Кнопка запуска/остановки
-        self.start_button = tk.Button(
-            frame,
-            text="▶️ Запустить мониторинг",
-            command=self.toggle_monitoring,
-            bg="#10b981",
-            fg="white",
-            font=('Arial', 11, 'bold'),
-            relief=tk.RAISED,
-            bd=2,
-            cursor="hand2"
+    def create_header(self):
+        """Создает заголовок с индикаторами."""
+        header = tk.Frame(self.root, bg='#1a1f3a', height=80)
+        header.pack(fill=tk.X, padx=15, pady=(10, 5))
+        
+        # Левая часть - логотип и название
+        left_header = tk.Frame(header, bg='#1a1f3a')
+        left_header.pack(side=tk.LEFT, fill=tk.Y, padx=20, pady=15)
+        
+        tk.Label(
+            left_header,
+            text="🛡️ NETWORK GUARDIAN",
+            bg='#1a1f3a',
+            fg='#3b82f6',
+            font=('Arial', 24, 'bold')
+        ).pack(anchor=tk.W)
+        
+        tk.Label(
+            left_header,
+            text="Advanced Network Security System",
+            bg='#1a1f3a',
+            fg='#94a3b8',
+            font=('Arial', 10)
+        ).pack(anchor=tk.W)
+        
+        # Правая часть - индикаторы статуса
+        right_header = tk.Frame(header, bg='#1a1f3a')
+        right_header.pack(side=tk.RIGHT, fill=tk.Y, padx=20, pady=15)
+        
+        self.status_indicator = tk.Label(
+            right_header,
+            text="● OFFLINE",
+            bg='#1a1f3a',
+            fg='#ef4444',
+            font=('Arial', 14, 'bold')
         )
-        self.start_button.pack(fill=tk.X, pady=5)
+        self.status_indicator.pack(anchor=tk.E)
         
-        # Интерфейс
-        ttk.Label(frame, text="Сетевой интерфейс:").pack(anchor=tk.W, pady=(10, 0))
-        self.interface_var = tk.StringVar(value="any")
-        interface_entry = ttk.Entry(frame, textvariable=self.interface_var)
-        interface_entry.pack(fill=tk.X, pady=5)
+        self.time_label = tk.Label(
+            right_header,
+            text="",
+            bg='#1a1f3a',
+            fg='#94a3b8',
+            font=('Arial', 10)
+        )
+        self.time_label.pack(anchor=tk.E)
         
-        # BPF фильтр
-        ttk.Label(frame, text="BPF фильтр (опционально):").pack(anchor=tk.W, pady=(10, 0))
-        self.filter_var = tk.StringVar()
-        filter_entry = ttk.Entry(frame, textvariable=self.filter_var)
-        filter_entry.pack(fill=tk.X, pady=5)
+    def create_control_cards(self, parent):
+        """Создает карточки управления."""
+        
+        # Карточка управления
+        control_card = self.create_card(parent, "⚙️ УПРАВЛЕНИЕ")
+        
+        # Кнопка запуска
+        self.start_btn = tk.Button(
+            control_card,
+            text="▶ ЗАПУСТИТЬ ЗАЩИТУ",
+            command=self.toggle_monitoring,
+            bg='#10b981',
+            fg='white',
+            font=('Arial', 12, 'bold'),
+            relief=tk.FLAT,
+            bd=0,
+            padx=20,
+            pady=15,
+            cursor="hand2",
+            activebackground='#059669'
+        )
+        self.start_btn.pack(fill=tk.X, pady=(0, 15))
+        
+        # Поля настроек
+        self.create_input_field(control_card, "Интерфейс:", "interface_var", "any")
+        self.create_input_field(control_card, "BPF Фильтр:", "filter_var", "")
         
         # Дополнительные кнопки
-        btn_frame = ttk.Frame(frame)
+        btn_frame = tk.Frame(control_card, bg='#1a1f3a')
         btn_frame.pack(fill=tk.X, pady=(10, 0))
         
-        tk.Button(
+        self.create_action_button(
             btn_frame,
-            text="🗑️ Очистить логи",
-            command=self.clear_logs,
-            bg="#6366f1",
-            fg="white",
-            font=('Arial', 9),
-            cursor="hand2"
-        ).pack(side=tk.LEFT, padx=2, expand=True, fill=tk.X)
+            "🗑️ ОЧИСТИТЬ",
+          Правила обнаружения
+        rules_label = tk.Label(
+            control_card,
+            text="ПРАВИЛА ОБНАРУЖЕНИЯ:",
+            bg='#1a1f3a',
+            fg='#94a3b8',
+            font=('Arial', 9, 'bold')
+        )
+        rules_label.pack(anchor=tk.W, pady=(10, 5))
         
-        tk.Button(
-            btn_frame,
-            text="🔓 Снять все блокировки",
-            command=self.clear_all_blocks,
-            bg="#ef4444",
-            fg="white",
-            font=('Arial', 9),
-            cursor="hand2"
-        ).pack(side=tk.RIGHT, padx=2, expand=True, fill=tk.X)
-        
-    def create_statistics_panel(self, parent):
-        """Создает панель статистики."""
-        frame = ttk.LabelFrame(parent, text="📊 Статистика", padding=10)
-        frame.pack(fill=tk.X, pady=(0, 10))
-        
-        self.stats_labels = {}
-        
-        stats = [
-            ("Всего пакетов:", "total_packets"),
-            ("Подозрительных:", "suspicious_packets"),
-            ("Заблокировано IP:", "blocked_ips"),
-            ("Статус:", "status")
+        self.detection_rules = {}
+        rules = [
+            ("port_scan", "🔍 Сканирование портов"),
+            ("syn_flood", "⚡ SYN Flood атака"),
+            ("icmp_flood", "📡 ICMP Flood атака"),
+            ("udp_flood", "💥 UDP Flood атака"),
+            ("large_packets", "📦 Большие пакеты"),
+            ("connection_limit", "🔗 Превышение лимита соединений"),
+            ("suspicious_ports", "🚪 Подозрительные порты")
         ]
         
-        for label_text, key in stats:
-            row_frame = ttk.Frame(frame)
-            row_frame.pack(fill=tk.X, pady=2)
+        for key, label in rules:
+            var = tk.BooleanVar(value=True)
+            self.detection_rules[key] = var
             
-            ttk.Label(row_frame, text=label_text, font=('Arial', 9)).pack(side=tk.LEFT)
+            cb_frame = tk.Frame(control_card, bg='#1a1f3a')
+            cb_frame.pack(fill=tk.X, pady=2)
             
-            value_label = ttk.Label(
-                row_frame,
-                text="0",
-                font=('Arial', 9, 'bold'),
-                foreground="#10b981"
+            cb = tk.Checkbutton(
+                cb_frame,
+                text=label,
+                variable=var,
+                bg='#1a1f3a',
+                fg='#e2e8f0',
+                font=('Arial', 9),
+                selectcolor='#0a0e27',
+                activebackground='#1a1f3a',
+                activeforeground='#3b82f6',
+                cursor="hand2",
+                command=lambda k=key: self.toggle_rule(k)
             )
-            value_label.pack(side=tk.RIGHT)
-            
-            self.stats_labels[key] = value_label
+            cb.pack(anchor=tk.W, padx=5)
         
-        self.stats_labels["status"].configure(text="Остановлен", foreground="#ef4444")
+        #   self.clear_logs,
+            '#6366f1'
+        ).pack(side=tk.LEFT, expand=True, fill=tk.X, padx=(0, 5))
         
-    def create_blocked_ips_panel(self, parent):
-        """Создает панель заблокированных IP."""
-        frame = ttk.LabelFrame(parent, text="🚫 Заблокированные IP", padding=10)
-        frame.pack(fill=tk.BOTH, expand=True)
+        self.create_action_button(
+            btn_frame,
+            "🔓 РАЗБЛОК.",
+            self.clear_all_blocks,
+            '#ef4444'
+        ).pack(side=tk.RIGHT, expand=True, fill=tk.X, padx=(5, 0))
         
-        # Список заблокированных IP
-        self.blocked_listbox = tk.Listbox(
-            frame,
-            bg="#0f172a",
-            fg="#e2e8f0",
-            font=('Courier', 9),
-            selectmode=tk.SINGLE,
-            height=10
+        # Карточка статистики
+        stats_card = self.create_card(parent, "📊 СТАТИСТИКА")
+        
+        self.stat_widgets = {}
+        stats = [
+            ("packets", "Всего пакетов", "0", "#3b82f6"),
+            ("threats", "Угроз", "0", "#ef4444"),
+            ("blocked", "Блокировок", "0", "#f59e0b"),
+            ("rate", "Скорость", "0 пак/с", "#10b981")
+        ]
+        
+        for key, label, value, color in stats:
+            self.create_stat_item(stats_card, label, value, color, key)
+        
+        # Карточка заблокированных IP
+        blocked_card = self.create_card(parent, "🚫 ЗАБЛОКИРОВАННЫЕ IP")
+        
+        # Список с прокруткой
+        scroll_frame = tk.Frame(blocked_card, bg='#1a1f3a')
+        scroll_frame.pack(fill=tk.BOTH, expand=True)
+        
+        scrollbar = tk.Scrollbar(scroll_frame, bg='#334155')
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        self.blocked_list = tk.Listbox(
+            scroll_frame,
+            bg='#0a0e27',
+            fg='#e2e8f0',
+            font=('Courier New', 9),
+            selectbackground='#3b82f6',
+            selectforeground='white',
+            relief=tk.FLAT,
+            bd=0,
+            yscrollcommand=scrollbar.set,
+            highlightthickness=0
         )
-        self.blocked_listbox.pack(fill=tk.BOTH, expand=True, pady=(0, 5))
+        self.blocked_list.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.config(command=self.blocked_list.yview)
         
         # Кнопка разблокировки
-        tk.Button(
+        self.create_action_button(
+            blocked_card,
+            "🔓 РАЗБЛОКИРОВАТЬ",
+            self.unblock_selected,
+            '#8b5cf6'
+        ).pack(fill=tk.X, pady=(10, 0))
+        
+    def create_card(self, parent, title):
+        """Создает карточку с заголовком."""
+        card_frame = tk.Frame(parent, bg='#1a1f3a', relief=tk.FLAT, bd=0)
+        card_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 15))
+        
+        # Заголовок
+        header = tk.Frame(card_frame, bg='#242947', height=45)
+        header.pack(fill=tk.X)
+        header.pack_propagate(False)
+        
+        tk.Label(
+            header,
+            text=title,
+            bg='#242947',
+            fg='#e2e8f0',
+            font=('Arial', 11, 'bold')
+        ).pack(side=tk.LEFT, padx=15, pady=10)
+        
+        # Контент
+        content = tk.Frame(card_frame, bg='#1a1f3a')
+        content.pack(fill=tk.BOTH, expand=True, padx=15, pady=15)
+        
+        return content
+        
+    def create_input_field(self, parent, label, var_name, default):
+        """Создает поле ввода."""
+        frame = tk.Frame(parent, bg='#1a1f3a')
+        frame.pack(fill=tk.X, pady=(0, 10))
+        
+        tk.Label(
             frame,
-            text="🔓 Разблокировать выбранный",
-            command=self.unblock_selected,
-            bg="#8b5cf6",
-            fg="white",
-            font=('Arial', 9),
-            cursor="hand2"
-        ).pack(fill=tk.X)
+            text=label,
+            bg='#1a1f3a',
+            fg='#94a3b8',
+            font=('Arial', 9)
+        ).pack(anchor=tk.W, pady=(0, 5))
+        
+        var = tk.StringVar(value=default)
+        setattr(self, var_name, var)
+        
+        entry = tk.Entry(
+            frame,
+            textvariable=var,
+            bg='#0a0e27',
+            fg='#e2e8f0',
+            font=('Arial', 10),
+            relief=tk.FLAT,
+            bd=0,
+            insertbackground='#3b82f6'
+        )
+        toggle_rule(self, rule_key):
+        """Переключает правило обнаружения."""
+        enabled = self.detection_rules[rule_key].get()
+        status = "активировано" if enabled else "деактивировано"
+        self.log_message(f"Правило '{rule_key}' {status}", "info")
+        
+        # Обновляем правила в анализаторе
+        self.update_analyzer_rules()
+    
+    def update_analyzer_rules(self):
+        """Обновляет активные правила в анализаторе."""
+        active_rules = {
+            key: var.get() 
+            for key, var in self.detection_rules.items()
+        }
+        # Здесь можно передать правила в analyzer
+        self.analyzer.active_rules = active_rules
+            frame,
+            text=value,
+            bg='#0a0e27',
+            fg=color,
+            font=('Arial', 14, 'bold')
+        )
+        value_label.pack(side=tk.RIGHT, padx=10, pady=8)
+        
+        self.stat_widgets[key] = value_label
+        
+    def create_graphs_panel(self, parent):
+        """Создает панель с графиками."""
+        
+        # Верхний график - трафик
+        traffic_card = self.create_card(parent, "📈 МОНИТОРИНГ ТРАФИКА")
+        
+        self.fig_traffic = Figure(figsize=(8, 3), facecolor='#1a1f3a')
+        self.ax_traffic = self.fig_traffic.add_subplot(111, facecolor='#0a0e27')
+        self.setup_graph(self.ax_traffic, "Пакеты/сек", '#3b82f6')
+        
+        self.canvas_traffic = FigureCanvasTkAgg(self.fig_traffic, traffic_card)
+        self.canvas_traffic.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+        
+        # Нижний график - угрозы
+        threats_card = self.create_card(parent, "⚠️ ОБНАРУЖЕНИЕ УГРОЗ")
+        
+        self.fig_threats = Figure(figsize=(8, 3), facecolor='#1a1f3a')
+        self.ax_threats = self.fig_threats.add_subplot(111, facecolor='#0a0e27')
+        self.setup_graph(self.ax_threats, "Угрозы", '#ef4444')
+        
+        self.canvas_threats = FigureCanvasTkAgg(self.fig_threats, threats_card)
+        self.canvas_threats.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+        
+    def setup_graph(self, ax, ylabel, color):
+        """Настраивает график."""
+        ax.set_ylabel(ylabel, color='#94a3b8', fontsize=9)
+        ax.set_xlabel('Время', color='#94a3b8', fontsize=9)
+        ax.tick_params(colors='#94a3b8', labelsize=8)
+        ax.spines['bottom'].set_color('#334155')
+        ax.spines['top'].set_color('#334155')
+        ax.spines['left'].set_color('#334155')
+        ax.spines['right'].set_color('#334155')
+        ax.grid(True, alpha=0.1, color='#334155')
         
     def create_events_panel(self, parent):
         """Создает панель событий."""
-        frame = ttk.LabelFrame(parent, text="⚠️ Подозрительные события", padding=10)
-        frame.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
         
-        self.events_text = scrolledtext.ScrolledText(
-            frame,
+        # Критические события
+        events_card = self.create_card(parent, "🔴 КРИТИЧЕСКИЕ СОБЫТИЯ")
+        
+        self.events_text = tk.Text(
+            events_card,
             wrap=tk.WORD,
-            bg="#0f172a",
-            fg="#fbbf24",
-            font=('Courier', 9),
-            height=15
+            bg='#0a0e27',
+            fg='#fbbf24',
+            font=('Courier New', 9),
+            relief=tk.FLAT,
+            bd=0,
+            height=15,
+            insertbackground='#fbbf24',
+            selectbackground='#3b82f6'
         )
         self.events_text.pack(fill=tk.BOTH, expand=True)
         
-    def create_logs_panel(self, parent):
-        """Создает панель логов."""
-        frame = ttk.LabelFrame(parent, text="📝 Системные логи", padding=10)
-        frame.pack(fill=tk.BOTH, expand=True)
+        # Системные логи
+        logs_card = self.create_card(parent, "📝 СИСТЕМНЫЕ ЛОГИ")
         
-        self.logs_text = scrolledtext.ScrolledText(
-            frame,
+        self.logs_text = tk.Text(
+            logs_card,
             wrap=tk.WORD,
-            bg="#0f172a",
-            fg="#94a3b8",
-            font=('Courier', 9),
-            height=10
+            bg='#0a0e27',
+            fg='#94a3b8',
+            font=('Courier New', 8),
+            relief=tk.FLAT,
+            bd=0,
+            height=12,
+            insertbackground='#94a3b8',
+            selectbackground='#3b82f6'
         )
         self.logs_text.pack(fill=tk.BOTH, expand=True)
         
+    def setup_graphs(self):
+        """Инициализирует графики."""
+        for _ in range(100):
+            self.packet_history.append(0)
+            self.threat_history.append(0)
+            self.time_labels.append("")
+    
     def toggle_monitoring(self):
         """Переключает мониторинг."""
         if self.monitor.is_running:
@@ -248,129 +435,125 @@ class TrafficMonitorGUI:
             self.start_monitoring()
     
     def start_monitoring(self):
-        """Запускает мониторинг."""
-        interface = self.interface_var.get() if self.interface_var.get() != "any" else None
-        filter_str = self.filter_var.get() if self.filter_var.get() else None
-        
-        self.log_message("Запуск мониторинга трафика...")
-        
-        try:
-            self.monitor.start_monitoring(interface, filter_str)
-            self.start_button.configure(
-                text="⏸️ Остановить мониторинг",
-                bg="#ef4444"
+                text="⏸ ОСТАНОВИТЬ ЗАЩИТУ",
+                bg='#ef4444',
+                activebackground='#dc2626'
             )
-            self.stats_labels["status"].configure(text="Запущен", foreground="#10b981")
-            self.log_message("Мониторинг запущен успешно")
+            self.status_indicator.configure(text="● ONLINE", fg='#10b981')
+            self.log_message("🟢 Система защиты активирована", "success")
         except Exception as e:
-            messagebox.showerror("Ошибка", f"Не удалось запустить мониторинг:\n{e}")
-            self.log_message(f"Ошибка запуска: {e}")
+            messagebox.showerror("Ошибка", f"Не удалось запустить:\n{e}")
+            self.log_message(f"🔴 Ошибка запуска: {e}", "error")
     
     def stop_monitoring(self):
         """Останавливает мониторинг."""
-        self.log_message("Остановка мониторинга...")
         self.monitor.stop_monitoring()
-        self.start_button.configure(
-            text="▶️ Запустить мониторинг",
-            bg="#10b981"
+        self.start_btn.configure(
+            text="▶ ЗАПУСТИТЬ ЗАЩИТУ",
+            bg='#10b981',
+            activebackground='#059669'
         )
-        self.stats_labels["status"].configure(text="Остановлен", foreground="#ef4444")
-        self.log_message("Мониторинг остановлен")
+        self.status_indicator.configure(text="● OFFLINE", fg='#ef4444')
+        self.log_message("🔴 Система защиты деактивирована", "info")
     
     def on_packet_event(self, event_type, data):
-        """Обработчик событий пакетов."""
+        """Обработчик событий."""
         if event_type == "suspicious":
-            self.log_suspicious_event(data)
+            self.log_threat(data)
+            self.threat_history.append(self.threat_history[-1] + 1)
         
-        # Обновляем статистику
-        self.root.after(0, self.update_statistics)
+        self.root.after(0, self.update_interface)
     
-    def log_suspicious_event(self, data):
-        """Логирует подозрительное событие."""
+    def log_threat(self, data):
+        """Логирует угрозу."""
         timestamp = datetime.now().strftime("%H:%M:%S")
-        reason = data.get("reason", "Неизвестно")
         details = data.get("details", {})
         src_ip = details.get("src_ip", "N/A")
         
-        message = f"[{timestamp}] {reason}\n"
-        message += f"  IP: {src_ip}\n"
-        message += f"  Детали: {json.dumps(details, ensure_ascii=False, indent=2)}\n"
-        message += "-" * 50 + "\n"
+        message = f"[{timestamp}] 🔴 {reason}\n"
+        message += f"  └─ IP: {src_ip}\n\n"
         
-        self.events_text.insert(tk.END, message)
-        self.events_text.see(tk.END)
+        self.events_text.insert("1.0", message)
         
-        self.log_message(f"Обнаружена угроза: {reason} от {src_ip}")
+        # Ограничиваем размер
+        lines = int(self.events_text.index('end-1c').split('.')[0])
+        if lines > 200:
+            self.events_text.delete("200.0", tk.END)
     
-    def log_message(self, message):
-        """Добавляет сообщение в лог."""
+    def log_message(self, message, level="info"):
+        """Логирует сообщение."""
         timestamp = datetime.now().strftime("%H:%M:%S")
-        log_entry = f"[{timestamp}] {message}\n"
+        icon = {"info": "ℹ️", "success": "✅", "error": "❌"}.get(level, "ℹ️")
         
-        self.logs_text.insert(tk.END, log_entry)
-        self.logs_text.see(tk.END)
+        log_entry = f"[{timestamp}] {icon} {message}\n"
+        self.logs_text.insert("1.0", log_entry)
+        
+        lines = int(self.logs_text.index('end-1c').split('.')[0])
+        if lines > 150:
+            self.logs_text.delete("150.0", tk.END)
     
-    def update_statistics(self):
-        """Обновляет статистику."""
+    def update_interface(self):
+        """Обновляет интерфейс."""
+        # Время
+        self.time_label.configure(text=datetime.now().strftime("%H:%M:%S"))
+        
+        # Статистика
         stats = self.monitor.get_statistics()
-        analyzer_stats = self.analyzer.get_statistics()
+        self.stat_widgets["packets"].configure(text=str(stats["total_packets"]))
+        self.stat_widgets["threats"].configure(text=str(stats["suspicious_packets"]))
+        self.stat_widgets["blocked"].configure(text=str(stats["blocked_ips"]))
         
-        self.stats_labels["total_packets"].configure(text=str(stats["total_packets"]))
-        self.stats_labels["suspicious_packets"].configure(text=str(stats["suspicious_packets"]))
-        self.stats_labels["blocked_ips"].configure(text=str(analyzer_stats["blocked_ips"]))
+        # Обновляем графики
+        self.packet_history.append(stats["total_packets"])
+        self.time_labels.append(datetime.now().strftime("%H:%M:%S"))
         
-        # Обновляем список заблокированных IP
+        self.update_graphs()
         self.update_blocked_list()
         
-        # Повторяем обновление каждую секунду
-        if self.monitor.is_running:
-            self.root.after(1000, self.update_statistics)
-    
-    def update_blocked_list(self):
-        """Обновляет список заблокированных IP."""
-        self.blocked_listbox.delete(0, tk.END)
-        blocked_ips = self.firewall.get_blocked_list()
-        
-        for ip, info in blocked_ips.items():
-            reason = info.get("reason", "N/A")
-            timestamp = info.get("timestamp", "N/A")[:19]
-            self.blocked_listbox.insert(tk.END, f"{ip} | {reason} | {timestamp}")
+        # Повторяем обновление
+        update_graphs(self):
+        """Обновляет графики."""
+        # График трафика
+        self.ax_traffic.clear()
+        self.setup_graph(self.ax_traffic, "Пакеты", '#3b82f6')
+        self.ax_traffic.plot(list(self.packet_history), color='#3b82f6', linewidth=2)
+        self.axson = info.get("reason", "N/A")[:20]
+            timestamp = info.get("timestamp", "N/A")[11:19]
+            self.blocked_list.insert(tk.END, f"[{timestamp}] {ip} | {reason}")
     
     def unblock_selected(self):
         """Разблокирует выбранный IP."""
-        selection = self.blocked_listbox.curselection()
+        selection = self.blocked_list.curselection()
         if not selection:
-            messagebox.showwarning("Предупреждение", "Выберите IP для разблокировки")
+            messagebox.showwarning("Предупреждение", "Выберите IP")
             return
         
-        item = self.blocked_listbox.get(selection[0])
-        ip = item.split(" | ")[0]
+        item = self.blocked_list.get(selection[0])
+        ip = item.split("] ")[1].split(" | ")[0]
         
-        if messagebox.askyesno("Подтверждение", f"Разблокировать IP {ip}?"):
+        if messagebox.askyesno("Подтверждение", f"Разблокировать {ip}?"):
             self.firewall.unblock_ip(ip)
             self.analyzer.remove_from_blocklist(ip)
-            self.update_blocked_list()
-            self.log_message(f"IP {ip} разблокирован")
+            self.log_message(f"Разблокирован IP: {ip}", "success")
     
     def clear_all_blocks(self):
         """Снимает все блокировки."""
         if messagebox.askyesno("Подтверждение", "Снять все блокировки?"):
             self.firewall.clear_all_blocks()
             self.analyzer.suspicious_ips.clear()
-            self.update_blocked_list()
-            self.log_message("Все блокировки сняты")
+            self.log_message("Все блокировки сняты", "success")
     
     def clear_logs(self):
         """Очищает логи."""
         self.logs_text.delete(1.0, tk.END)
         self.events_text.delete(1.0, tk.END)
-        self.log_message("Логи очищены")
+        self.log_message("Логи очищены", "info")
 
 
 def main():
     """Главная функция."""
     root = tk.Tk()
-    app = TrafficMonitorGUI(root)
+    app = ModernTrafficMonitorGUI(root)
     root.mainloop()
 
 
