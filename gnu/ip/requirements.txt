@@ -1,2 +1,3 @@
 scapy==2.5.0
-tkinter
+matplotlib==3.8.0
+pillow==10.0.0
