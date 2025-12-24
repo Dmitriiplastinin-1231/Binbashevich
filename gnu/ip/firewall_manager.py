@@ -11,9 +11,11 @@ from datetime import datetime
 class FirewallManager:
     """Класс для управления правилами файрвола."""
     
-    def __init__(self):
+    def __init__(self, enable_system_block=True):
         self.blocked_ips = {}
         self.logger = logging.getLogger(__name__)
+        # Попытаться применять реальные правила iptables/conntrack; при ошибке будет симуляция
+        self.enable_system_block = enable_system_block
         
     def block_ip(self, ip_address, reason="Подозрительная активность"):
         """
@@ -31,26 +33,24 @@ class FirewallManager:
             return False
         
         try:
-            # Попытка добавить правило iptables (требует sudo)
-            # В реальной системе нужны права root
-            command = f"sudo iptables -A INPUT -s {ip_address} -j DROP"
-            
-            # Симуляция блокировки (для тестирования без прав root)
-            self.logger.info(f"Попытка блокировки IP: {ip_address}")
-            self.logger.info(f"Команда: {command}")
-            
-            # Раскомментируйте для реальной блокировки:
-            # result = subprocess.run(
-            #     command.split(),
-            #     capture_output=True,
-            #     text=True,
-            #     timeout=5
-            # )
-            # 
-            # if result.returncode != 0:
-            #     self.logger.error(f"Ошибка блокировки: {result.stderr}")
-            #     return False
-            
+            if self.enable_system_block:
+                cmds = [
+                    ["sudo", "iptables", "-I", "INPUT", "-s", ip_address, "-j", "DROP"],
+                    ["sudo", "iptables", "-I", "OUTPUT", "-d", ip_address, "-j", "DROP"],
+                    ["sudo", "conntrack", "-D", "-s", ip_address],
+                    ["sudo", "conntrack", "-D", "-d", ip_address],
+                ]
+                for cmd in cmds:
+                    try:
+                        result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
+                        if result.returncode != 0:
+                            self.logger.warning(f"Команда {' '.join(cmd)} завершилась с ошибкой: {result.stderr.strip()}")
+                    except FileNotFoundError:
+                        self.logger.warning(f"Утилита {cmd[0]} недоступна, блокировка может быть симуляционной")
+                    except Exception as e:
+                        self.logger.warning(f"Ошибка выполнения {' '.join(cmd)}: {e}")
+
+            # Записываем факт блокировки (реальной или симуляционной)
             self.blocked_ips[ip_address] = {
                 "timestamp": datetime.now().isoformat(),
                 "reason": reason
@@ -78,25 +78,21 @@ class FirewallManager:
             return False
         
         try:
-            # Попытка удалить правило iptables
-            command = f"sudo iptables -D INPUT -s {ip_address} -j DROP"
-            
-            # Симуляция разблокировки
-            self.logger.info(f"Попытка разблокировки IP: {ip_address}")
-            self.logger.info(f"Команда: {command}")
-            
-            # Раскомментируйте для реальной разблокировки:
-            # result = subprocess.run(
-            #     command.split(),
-            #     capture_output=True,
-            #     text=True,
-            #     timeout=5
-            # )
-            # 
-            # if result.returncode != 0:
-            #     self.logger.error(f"Ошибка разблокировки: {result.stderr}")
-            #     return False
-            
+            if self.enable_system_block:
+                cmds = [
+                    ["sudo", "iptables", "-D", "INPUT", "-s", ip_address, "-j", "DROP"],
+                    ["sudo", "iptables", "-D", "OUTPUT", "-d", ip_address, "-j", "DROP"],
+                ]
+                for cmd in cmds:
+                    try:
+                        result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
+                        if result.returncode != 0:
+                            self.logger.warning(f"Команда {' '.join(cmd)} завершилась с ошибкой: {result.stderr.strip()}")
+                    except FileNotFoundError:
+                        self.logger.warning(f"Утилита {cmd[0]} недоступна, разблокировка может быть симуляционной")
+                    except Exception as e:
+                        self.logger.warning(f"Ошибка выполнения {' '.join(cmd)}: {e}")
+
             del self.blocked_ips[ip_address]
             self.logger.info(f"IP {ip_address} разблокирован")
             return True
