@@ -1,0 +1,1071 @@
+{
+  "messages": [
+    {
+      "id": 25090,
+      "timestamp": "2025-12-24T02:30:45.953456",
+      "type": "system",
+      "data": {
+        "message": "Файл логов отправлен в Telegram"
+      },
+      "read": false
+    },
+    {
+      "id": 25089,
+      "timestamp": "2025-12-24T02:30:35.292690",
+      "type": "system",
+      "data": {
+        "message": "Мониторинг остановлен"
+      },
+      "read": false
+    },
+    {
+      "id": 25088,
+      "timestamp": "2025-12-24T02:30:35.290673",
+      "type": "system",
+      "data": {
+        "message": "Мониторинг файлов остановлен"
+      },
+      "read": false
+    },
+    {
+      "id": 25087,
+      "timestamp": "2025-12-24T02:30:35.274907",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.273913"
+      },
+      "read": false
+    },
+    {
+      "id": 25086,
+      "timestamp": "2025-12-24T02:30:35.272397",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.269783"
+      },
+      "read": false
+    },
+    {
+      "id": 25085,
+      "timestamp": "2025-12-24T02:30:35.268401",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.267425"
+      },
+      "read": false
+    },
+    {
+      "id": 25084,
+      "timestamp": "2025-12-24T02:30:35.266036",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.265099"
+      },
+      "read": false
+    },
+    {
+      "id": 25083,
+      "timestamp": "2025-12-24T02:30:35.262934",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.261998"
+      },
+      "read": false
+    },
+    {
+      "id": 25082,
+      "timestamp": "2025-12-24T02:30:35.262614",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:54102",
+        "remote_address": "95.163.40.140:443",
+        "pid": 3588,
+        "name": "chrome",
+        "timestamp": "2025-12-24T02:30:35.261899"
+      },
+      "read": false
+    },
+    {
+      "id": 25081,
+      "timestamp": "2025-12-24T02:30:35.259207",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.258469"
+      },
+      "read": false
+    },
+    {
+      "id": 25080,
+      "timestamp": "2025-12-24T02:30:35.259157",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:56960",
+        "remote_address": "51.132.193.105:443",
+        "pid": 30553,
+        "name": "code",
+        "timestamp": "2025-12-24T02:30:35.258297"
+      },
+      "read": false
+    },
+    {
+      "id": 25079,
+      "timestamp": "2025-12-24T02:30:35.256809",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.254691"
+      },
+      "read": false
+    },
+    {
+      "id": 25078,
+      "timestamp": "2025-12-24T02:30:35.255466",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:56978",
+        "remote_address": "91.105.192.100:443",
+        "pid": 18257,
+        "name": "Telegram",
+        "timestamp": "2025-12-24T02:30:35.254217"
+      },
+      "read": false
+    },
+    {
+      "id": 25077,
+      "timestamp": "2025-12-24T02:30:35.252028",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.249377"
+      },
+      "read": false
+    },
+    {
+      "id": 25076,
+      "timestamp": "2025-12-24T02:30:35.249594",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:54726",
+        "remote_address": "149.154.175.53:443",
+        "pid": 18257,
+        "name": "Telegram",
+        "timestamp": "2025-12-24T02:30:35.246849"
+      },
+      "read": false
+    },
+    {
+      "id": 25075,
+      "timestamp": "2025-12-24T02:30:35.247787",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.246715"
+      },
+      "read": false
+    },
+    {
+      "id": 25074,
+      "timestamp": "2025-12-24T02:30:35.244588",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:43388",
+        "remote_address": "91.105.192.100:443",
+        "pid": 18257,
+        "name": "Telegram",
+        "timestamp": "2025-12-24T02:30:35.242143"
+      },
+      "read": false
+    },
+    {
+      "id": 25073,
+      "timestamp": "2025-12-24T02:30:35.244095",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.243206"
+      },
+      "read": false
+    },
+    {
+      "id": 25072,
+      "timestamp": "2025-12-24T02:30:35.241531",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.238471"
+      },
+      "read": false
+    },
+    {
+      "id": 25071,
+      "timestamp": "2025-12-24T02:30:35.239329",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:57010",
+        "remote_address": "91.105.192.100:443",
+        "pid": 18257,
+        "name": "Telegram",
+        "timestamp": "2025-12-24T02:30:35.235219"
+      },
+      "read": false
+    },
+    {
+      "id": 25070,
+      "timestamp": "2025-12-24T02:30:35.235585",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.233164"
+      },
+      "read": false
+    },
+    {
+      "id": 25069,
+      "timestamp": "2025-12-24T02:30:35.233545",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:35568",
+        "remote_address": "91.105.192.100:443",
+        "pid": 18257,
+        "name": "Telegram",
+        "timestamp": "2025-12-24T02:30:35.230296"
+      },
+      "read": false
+    },
+    {
+      "id": 25068,
+      "timestamp": "2025-12-24T02:30:35.231491",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.228573"
+      },
+      "read": false
+    },
+    {
+      "id": 25067,
+      "timestamp": "2025-12-24T02:30:35.228678",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:40546",
+        "remote_address": "34.107.243.93:443",
+        "pid": 29336,
+        "name": "firefox",
+        "timestamp": "2025-12-24T02:30:35.225874"
+      },
+      "read": false
+    },
+    {
+      "id": 25066,
+      "timestamp": "2025-12-24T02:30:35.226614",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.223985"
+      },
+      "read": false
+    },
+    {
+      "id": 25065,
+      "timestamp": "2025-12-24T02:30:35.224220",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:48320",
+        "remote_address": "149.154.167.51:443",
+        "pid": 18257,
+        "name": "Telegram",
+        "timestamp": "2025-12-24T02:30:35.219523"
+      },
+      "read": false
+    },
+    {
+      "id": 25064,
+      "timestamp": "2025-12-24T02:30:35.222057",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.217523"
+      },
+      "read": false
+    },
+    {
+      "id": 25063,
+      "timestamp": "2025-12-24T02:30:35.217776",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:56994",
+        "remote_address": "91.105.192.100:443",
+        "pid": 18257,
+        "name": "Telegram",
+        "timestamp": "2025-12-24T02:30:35.215324"
+      },
+      "read": false
+    },
+    {
+      "id": 25062,
+      "timestamp": "2025-12-24T02:30:35.215906",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.213139"
+      },
+      "read": false
+    },
+    {
+      "id": 25061,
+      "timestamp": "2025-12-24T02:30:35.213576",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:54110",
+        "remote_address": "95.163.40.140:443",
+        "pid": 3588,
+        "name": "chrome",
+        "timestamp": "2025-12-24T02:30:35.210826"
+      },
+      "read": false
+    },
+    {
+      "id": 25060,
+      "timestamp": "2025-12-24T02:30:35.211436",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.208860"
+      },
+      "read": false
+    },
+    {
+      "id": 25059,
+      "timestamp": "2025-12-24T02:30:35.209309",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:57016",
+        "remote_address": "91.105.192.100:443",
+        "pid": 18257,
+        "name": "Telegram",
+        "timestamp": "2025-12-24T02:30:35.206954"
+      },
+      "read": false
+    },
+    {
+      "id": 25058,
+      "timestamp": "2025-12-24T02:30:35.207390",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.204778"
+      },
+      "read": false
+    },
+    {
+      "id": 25057,
+      "timestamp": "2025-12-24T02:30:35.205269",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:49274",
+        "remote_address": "140.82.114.22:443",
+        "pid": 30695,
+        "name": "code",
+        "timestamp": "2025-12-24T02:30:35.200694"
+      },
+      "read": false
+    },
+    {
+      "id": 25056,
+      "timestamp": "2025-12-24T02:30:35.201292",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.198716"
+      },
+      "read": false
+    },
+    {
+      "id": 25055,
+      "timestamp": "2025-12-24T02:30:35.199224",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:53722",
+        "remote_address": "172.253.124.188:5228",
+        "pid": 3588,
+        "name": "chrome",
+        "timestamp": "2025-12-24T02:30:35.197884"
+      },
+      "read": false
+    },
+    {
+      "id": 25054,
+      "timestamp": "2025-12-24T02:30:35.197113",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.194583"
+      },
+      "read": false
+    },
+    {
+      "id": 25053,
+      "timestamp": "2025-12-24T02:30:35.195229",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:57018",
+        "remote_address": "91.105.192.100:443",
+        "pid": 18257,
+        "name": "Telegram",
+        "timestamp": "2025-12-24T02:30:35.194057"
+      },
+      "read": false
+    },
+    {
+      "id": 25052,
+      "timestamp": "2025-12-24T02:30:35.193059",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.190698"
+      },
+      "read": false
+    },
+    {
+      "id": 25051,
+      "timestamp": "2025-12-24T02:30:35.191308",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:48330",
+        "remote_address": "149.154.167.51:443",
+        "pid": 18257,
+        "name": "Telegram",
+        "timestamp": "2025-12-24T02:30:35.188410"
+      },
+      "read": false
+    },
+    {
+      "id": 25050,
+      "timestamp": "2025-12-24T02:30:35.188963",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.185911"
+      },
+      "read": false
+    },
+    {
+      "id": 25049,
+      "timestamp": "2025-12-24T02:30:35.186145",
+      "type": "network_connection",
+      "data": {
+        "type": "established",
+        "local_address": "192.168.0.106:35572",
+        "remote_address": "91.105.192.100:443",
+        "pid": 18257,
+        "name": "Telegram",
+        "timestamp": "2025-12-24T02:30:35.183531"
+      },
+      "read": false
+    },
+    {
+      "id": 25048,
+      "timestamp": "2025-12-24T02:30:35.184259",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.183452"
+      },
+      "read": false
+    },
+    {
+      "id": 25047,
+      "timestamp": "2025-12-24T02:30:35.181977",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.181045"
+      },
+      "read": false
+    },
+    {
+      "id": 25046,
+      "timestamp": "2025-12-24T02:30:35.179735",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.178644"
+      },
+      "read": false
+    },
+    {
+      "id": 25045,
+      "timestamp": "2025-12-24T02:30:35.177482",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.176438"
+      },
+      "read": false
+    },
+    {
+      "id": 25044,
+      "timestamp": "2025-12-24T02:30:35.175209",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.173953"
+      },
+      "read": false
+    },
+    {
+      "id": 25043,
+      "timestamp": "2025-12-24T02:30:35.172627",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.170029"
+      },
+      "read": false
+    },
+    {
+      "id": 25042,
+      "timestamp": "2025-12-24T02:30:35.168126",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.167019"
+      },
+      "read": false
+    },
+    {
+      "id": 25041,
+      "timestamp": "2025-12-24T02:30:35.165656",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.164605"
+      },
+      "read": false
+    },
+    {
+      "id": 25040,
+      "timestamp": "2025-12-24T02:30:35.163216",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.162308"
+      },
+      "read": false
+    },
+    {
+      "id": 25039,
+      "timestamp": "2025-12-24T02:30:35.160984",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.159771"
+      },
+      "read": false
+    },
+    {
+      "id": 25038,
+      "timestamp": "2025-12-24T02:30:35.158087",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.156401"
+      },
+      "read": false
+    },
+    {
+      "id": 25037,
+      "timestamp": "2025-12-24T02:30:35.154847",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.153731"
+      },
+      "read": false
+    },
+    {
+      "id": 25036,
+      "timestamp": "2025-12-24T02:30:35.152169",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.149828"
+      },
+      "read": false
+    },
+    {
+      "id": 25035,
+      "timestamp": "2025-12-24T02:30:35.148293",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.147255"
+      },
+      "read": false
+    },
+    {
+      "id": 25034,
+      "timestamp": "2025-12-24T02:30:35.145839",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.144783"
+      },
+      "read": false
+    },
+    {
+      "id": 25033,
+      "timestamp": "2025-12-24T02:30:35.143225",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.142108"
+      },
+      "read": false
+    },
+    {
+      "id": 25032,
+      "timestamp": "2025-12-24T02:30:35.140577",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.139337"
+      },
+      "read": false
+    },
+    {
+      "id": 25031,
+      "timestamp": "2025-12-24T02:30:35.137313",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.136043"
+      },
+      "read": false
+    },
+    {
+      "id": 25030,
+      "timestamp": "2025-12-24T02:30:35.134674",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.133327"
+      },
+      "read": false
+    },
+    {
+      "id": 25029,
+      "timestamp": "2025-12-24T02:30:35.131621",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.130856"
+      },
+      "read": false
+    },
+    {
+      "id": 25028,
+      "timestamp": "2025-12-24T02:30:35.129356",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.128173"
+      },
+      "read": false
+    },
+    {
+      "id": 25027,
+      "timestamp": "2025-12-24T02:30:35.126755",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.125424"
+      },
+      "read": false
+    },
+    {
+      "id": 25026,
+      "timestamp": "2025-12-24T02:30:35.123912",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.122948"
+      },
+      "read": false
+    },
+    {
+      "id": 25025,
+      "timestamp": "2025-12-24T02:30:35.101658",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.100996"
+      },
+      "read": false
+    },
+    {
+      "id": 25024,
+      "timestamp": "2025-12-24T02:30:35.099652",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.098669"
+      },
+      "read": false
+    },
+    {
+      "id": 25023,
+      "timestamp": "2025-12-24T02:30:35.097425",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.096839"
+      },
+      "read": false
+    },
+    {
+      "id": 25022,
+      "timestamp": "2025-12-24T02:30:35.095640",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.094993"
+      },
+      "read": false
+    },
+    {
+      "id": 25021,
+      "timestamp": "2025-12-24T02:30:35.093734",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.092777"
+      },
+      "read": false
+    },
+    {
+      "id": 25020,
+      "timestamp": "2025-12-24T02:30:35.091482",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.090807"
+      },
+      "read": false
+    },
+    {
+      "id": 25019,
+      "timestamp": "2025-12-24T02:30:35.089346",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.086829"
+      },
+      "read": false
+    },
+    {
+      "id": 25018,
+      "timestamp": "2025-12-24T02:30:35.085552",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.084507"
+      },
+      "read": false
+    },
+    {
+      "id": 25017,
+      "timestamp": "2025-12-24T02:30:35.083285",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.082463"
+      },
+      "read": false
+    },
+    {
+      "id": 25016,
+      "timestamp": "2025-12-24T02:30:35.081163",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.080317"
+      },
+      "read": false
+    },
+    {
+      "id": 25015,
+      "timestamp": "2025-12-24T02:30:35.079094",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.078358"
+      },
+      "read": false
+    },
+    {
+      "id": 25014,
+      "timestamp": "2025-12-24T02:30:35.077156",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.076129"
+      },
+      "read": false
+    },
+    {
+      "id": 25013,
+      "timestamp": "2025-12-24T02:30:35.074917",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.073995"
+      },
+      "read": false
+    },
+    {
+      "id": 25012,
+      "timestamp": "2025-12-24T02:30:35.072600",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.070474"
+      },
+      "read": false
+    },
+    {
+      "id": 25011,
+      "timestamp": "2025-12-24T02:30:35.067923",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.067028"
+      },
+      "read": false
+    },
+    {
+      "id": 25010,
+      "timestamp": "2025-12-24T02:30:35.065563",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.064859"
+      },
+      "read": false
+    },
+    {
+      "id": 25009,
+      "timestamp": "2025-12-24T02:30:35.063602",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.062748"
+      },
+      "read": false
+    },
+    {
+      "id": 25008,
+      "timestamp": "2025-12-24T02:30:35.061497",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.060601"
+      },
+      "read": false
+    },
+    {
+      "id": 25007,
+      "timestamp": "2025-12-24T02:30:35.059455",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.058522"
+      },
+      "read": false
+    },
+    {
+      "id": 25006,
+      "timestamp": "2025-12-24T02:30:35.057312",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.056183"
+      },
+      "read": false
+    },
+    {
+      "id": 25005,
+      "timestamp": "2025-12-24T02:30:35.054855",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.052052"
+      },
+      "read": false
+    },
+    {
+      "id": 25004,
+      "timestamp": "2025-12-24T02:30:35.050742",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.049597"
+      },
+      "read": false
+    },
+    {
+      "id": 25003,
+      "timestamp": "2025-12-24T02:30:35.048315",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.047406"
+      },
+      "read": false
+    },
+    {
+      "id": 25002,
+      "timestamp": "2025-12-24T02:30:35.046101",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.045283"
+      },
+      "read": false
+    },
+    {
+      "id": 25001,
+      "timestamp": "2025-12-24T02:30:35.044118",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.043115"
+      },
+      "read": false
+    },
+    {
+      "id": 25000,
+      "timestamp": "2025-12-24T02:30:35.041859",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.040776"
+      },
+      "read": false
+    },
+    {
+      "id": 24999,
+      "timestamp": "2025-12-24T02:30:35.039523",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.038438"
+      },
+      "read": false
+    },
+    {
+      "id": 24998,
+      "timestamp": "2025-12-24T02:30:35.035159",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.034250"
+      },
+      "read": false
+    },
+    {
+      "id": 24997,
+      "timestamp": "2025-12-24T02:30:35.032947",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.032134"
+      },
+      "read": false
+    },
+    {
+      "id": 24996,
+      "timestamp": "2025-12-24T02:30:35.030823",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.029837"
+      },
+      "read": false
+    },
+    {
+      "id": 24995,
+      "timestamp": "2025-12-24T02:30:35.028628",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.027594"
+      },
+      "read": false
+    },
+    {
+      "id": 24994,
+      "timestamp": "2025-12-24T02:30:35.026279",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.025188"
+      },
+      "read": false
+    },
+    {
+      "id": 24993,
+      "timestamp": "2025-12-24T02:30:35.023935",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.022958"
+      },
+      "read": false
+    },
+    {
+      "id": 24992,
+      "timestamp": "2025-12-24T02:30:35.021535",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.018549"
+      },
+      "read": false
+    },
+    {
+      "id": 24991,
+      "timestamp": "2025-12-24T02:30:35.017327",
+      "type": "file_modified",
+      "data": {
+        "path": "/home/dmitriy/all_files/Jasur/gnu/audit/audit_log.json",
+        "timestamp": "2025-12-24T02:30:35.016494"
+      },
+      "read": false
+    }
+  ],
+  "next_id": 25091,
+  "last_save": "2025-12-24T02:30:45.953475"
+}
