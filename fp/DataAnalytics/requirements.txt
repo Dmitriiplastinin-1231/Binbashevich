@@ -1,0 +1,14 @@
+httpx
+feedparser
+PyQt5
+requests
+pandas
+beautifulsoup4
+numpy
+pymorphy3
+nltk
+matplotlib
+wordcloud
+selenium
+telethon
+flask
