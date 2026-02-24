@@ -9,16 +9,23 @@ app = Flask(__name__)
 SOURCES_DIR = Path("sources_analytics")
 NETWORKS_DIR = Path("networks_analytics")
 
-telegram_sources = ['Фонтанка SPB Online', 'РИА Новости', 'Топор. Экономика.', 'Mash', 'Прямой Эфир • Новости']
-vk_sources = ["Комсомольская правда (kpru)", "NEWS.ru (nws_ru)", "Russia Today (rt_russian)",
-               "Новости дня (ndnews24)", 'Вести (vesti)']
+# 10 источников данных:
+# 1. Telegram (группы)  2. VKontakte (группы)
+# 3. RBC  4. VC.ru  5. Habr  6. Lenta.ru  7. ТАСС  8. Коммерсантъ  9. Газета.ру  10. Известия
 
-# Основные группы и подгруппы
 GROUPS = {
-    "telegram": telegram_sources,
-    "vkontakte": vk_sources,
-    "detached_sources": [source for source in os.listdir(Path("data"))
-                         if source not in telegram_sources and source not in vk_sources]
+    "telegram": "Telegram (группы пользователя)",
+    "vkontakte": "VKontakte (группы пользователя)",
+    "detached_sources": [
+        "RBC (rbc.csv)",
+        "VC.ru (vc.csv)",
+        "Habr (habr.csv)",
+        "Lenta.ru (lentaru.csv)",
+        "ТАСС (tass.csv)",
+        "Коммерсантъ (kommersant.csv)",
+        "Газета.ру (gazeta.csv)",
+        "Известия (izvestia.csv)",
+    ]
 }
 
 @app.route("/")

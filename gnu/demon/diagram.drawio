@@ -1,0 +1,87 @@
+<mxfile host="app.diagrams.net" modified="2026-02-20T00:00:00.000Z" agent="GitHub Copilot" version="22.1.0" type="device">
+  <diagram id="diagram-gnu-demon" name="gnu/demon (flow)">
+    <mxGraphModel dx="1100" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Flowchart nodes -->
+        <mxCell id="n_start" value="начало" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="300" y="20" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_cfg" value="считываем&#10;конфигурационный&#10;файл (/etc/backup_daemon/config.ini)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="120" width="320" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_log" value="настраиваем логирование&#10;(создаём/открываем&#10;/var/log/backup_daemon.log)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="235" width="320" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_daemonize" value="запуск в фоне&#10;и создание PID-файла&#10;(/var/run/backup_daemon.pid)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="350" width="320" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_signal" value="получен сигнал&#10;остановки&#10;(SIGTERM/SIGINT)?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="325" y="475" width="170" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_backup" value="создать резервную копию&#10;(source_dir → backup_dir)&#10;zip (compress=true)&#10;или copytree" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="620" width="320" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_cleanup" value="очистка старых копий&#10;оставить max_backups&#10;(удалить лишние)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="755" width="320" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_sleep" value="ожидание interval_minutes&#10;(сон, затем повтор)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="870" width="320" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_end" value="конец" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="650" y="500" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" style="endArrow=block;html=1;orthogonalLoop=1;rounded=0;" edge="1" parent="1" source="n_start" target="n_cfg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="endArrow=block;html=1;orthogonalLoop=1;rounded=0;" edge="1" parent="1" source="n_cfg" target="n_log">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="endArrow=block;html=1;orthogonalLoop=1;rounded=0;" edge="1" parent="1" source="n_log" target="n_daemonize">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="endArrow=block;html=1;orthogonalLoop=1;rounded=0;" edge="1" parent="1" source="n_daemonize" target="n_signal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- decision: YES -> end -->
+        <mxCell id="e_yes" value="да" style="endArrow=block;html=1;orthogonalLoop=1;rounded=0;" edge="1" parent="1" source="n_signal" target="n_end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- decision: NO -> do backup -->
+        <mxCell id="e_no" value="нет" style="endArrow=block;html=1;orthogonalLoop=1;rounded=0;" edge="1" parent="1" source="n_signal" target="n_backup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e5" style="endArrow=block;html=1;orthogonalLoop=1;rounded=0;" edge="1" parent="1" source="n_backup" target="n_cleanup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="endArrow=block;html=1;orthogonalLoop=1;rounded=0;" edge="1" parent="1" source="n_cleanup" target="n_sleep">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- loop back to decision -->
+        <mxCell id="e_loop" value="цикл" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="n_sleep" target="n_signal">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="185" y="910" as="sourcePoint" />
+            <mxPoint x="185" y="535" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -2,16 +2,25 @@ import subprocess
 import os
 
 def run_pipeline(selected_telegram_groups, selected_vk_groups):
+    """Запуск полного пайплайна: парсинг 10 источников -> аналитика -> визуализация."""
     scripts_dir = "./"
 
     tg_arg = ",".join(selected_telegram_groups) if selected_telegram_groups else ""
     vk_arg = ",".join(selected_vk_groups) if selected_vk_groups else ""
 
+    # parser.py параллельно запускает все 10 источников
+    # (telegram, vkontakte, rbc, vc, habr, lentaru, tass, kommersant, gazeta, izvestia)
+    parser_args = []
+    if tg_arg:
+        parser_args += ["--tg", tg_arg]
+    if vk_arg:
+        parser_args += ["--vk", vk_arg]
+
     scripts = [
-        ("parser.py", ["--tg", tg_arg, "--vk", vk_arg]),
-        ("analytics.py", []),
-        ("analytics.py", ["--input", "totals", "--output", "networks_analytics"]),
-        ("visualization.py", []),  # Flask
+        ("parser.py", parser_args),                                      # 10 парсеров параллельно + uniter
+        ("analytics.py", []),                                             # аналитика по отдельным источникам
+        ("analytics.py", ["--input", "totals", "--output", "networks_analytics"]),  # аналитика по сетям
+        ("visualization.py", []),                                         # Flask-визуализация
     ]
 
     for i, (script, args) in enumerate(scripts):
