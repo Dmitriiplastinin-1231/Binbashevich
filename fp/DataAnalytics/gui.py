@@ -1,138 +1,147 @@
-import sys
-from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QTextEdit, QLineEdit, QGroupBox
-)
-from PyQt5.QtCore import QThread, pyqtSignal
+import tkinter as tk
+from tkinter import ttk, scrolledtext
 import subprocess
+import threading
 
 
-class PipelineWorker(QThread):
-    log_signal = pyqtSignal(str)
-    finished_signal = pyqtSignal()
+def run_script(script_name, args=None, log_func=None):
+    """Запуск скрипта и логирование результата."""
+    if args is None:
+        args = []
+    if log_func:
+        log_func(f"=== Запуск {script_name} {' '.join(args)} ===\n")
+    result = subprocess.run(
+        ["python3", script_name] + args,
+        capture_output=True,
+        text=True,
+    )
+    if log_func:
+        if result.stdout:
+            log_func(result.stdout)
+        if result.stderr:
+            log_func(f"Ошибка в {script_name}:\n{result.stderr}\n")
+        log_func(f"--- {script_name} завершён с кодом {result.returncode} ---\n\n")
+    return result
 
-    def __init__(self, tg_groups, vk_groups):
-        super().__init__()
-        self.tg_groups = tg_groups
-        self.vk_groups = vk_groups
 
-    def run_script(self, script_name, args=None, capture=True):
-        if args is None:
-            args = []
-        self.log_signal.emit(f"=== Запуск {script_name} {' '.join(args)} ===")
-        result = subprocess.run(
-            ["python3", script_name] + args,
-            capture_output=capture,
-            text=True,
+def run_pipeline(tg_groups, vk_groups, log_func, on_finish):
+    """Запуск пайплайна в отдельном потоке."""
+    tg_arg = ",".join(tg_groups) if tg_groups else ""
+    vk_arg = ",".join(vk_groups) if vk_groups else ""
+
+    parser_args = []
+    if tg_arg:
+        parser_args += ["--tg", tg_arg]
+    if vk_arg:
+        parser_args += ["--vk", vk_arg]
+
+    # Этап 1: параллельный парсинг 10 источников
+    run_script("parser.py", parser_args, log_func)
+    log_func("\nПарсинг завершён. Переходим к аналитике.\n\n")
+
+    # Этап 2: аналитика
+    run_script("analytics.py", [], log_func)
+    run_script("analytics.py", ["--input", "totals", "--output", "networks_analytics"], log_func)
+
+    # Этап 3: визуализация
+    run_script("visualization.py", [], log_func)
+
+    log_func("=== Все скрипты завершены ===\n")
+    on_finish()
+
+
+class MainWindow:
+    def __init__(self, root):
+        self.root = root
+        root.title("Анализ данных из 10 источников")
+        root.geometry("700x600")
+        root.resizable(True, True)
+
+        main_frame = ttk.Frame(root, padding=10)
+        main_frame.pack(fill=tk.BOTH, expand=True)
+
+        # --- Telegram группы ---
+        tg_frame = ttk.LabelFrame(main_frame, text="Telegram-группы", padding=5)
+        tg_frame.pack(fill=tk.X, pady=(0, 5))
+
+        ttk.Label(tg_frame, text="Введите названия групп через запятую:").pack(anchor=tk.W)
+        self.tg_input = ttk.Entry(tg_frame)
+        self.tg_input.pack(fill=tk.X, pady=2)
+        self.tg_input.insert(0, "Mash, Фонтанка SPB Online, РИА Новости")
+
+        # --- VK группы ---
+        vk_frame = ttk.LabelFrame(main_frame, text="VK-группы", padding=5)
+        vk_frame.pack(fill=tk.X, pady=(0, 5))
+
+        ttk.Label(vk_frame, text="Введите short_name групп через запятую:").pack(anchor=tk.W)
+        self.vk_input = ttk.Entry(vk_frame)
+        self.vk_input.pack(fill=tk.X, pady=2)
+        self.vk_input.insert(0, "kpru, nws_ru, rt_russian, ndnews24, vesti")
+
+        # --- Информация об автоматических источниках ---
+        info_frame = ttk.LabelFrame(main_frame, text="Автоматические источники (8 шт.)", padding=5)
+        info_frame.pack(fill=tk.X, pady=(0, 5))
+
+        ttk.Label(
+            info_frame,
+            text="RBC, VC.ru, Habr, Lenta.ru, ТАСС, Коммерсантъ, Газета.ру, Известия\n"
+                 "Эти источники парсятся автоматически при запуске.",
+            wraplength=650
+        ).pack(anchor=tk.W)
+
+        # --- Кнопка запуска ---
+        self.start_button = ttk.Button(
+            main_frame,
+            text="Запустить (10 источников параллельно)",
+            command=self.start_pipeline
         )
-        if capture:
-            if result.stdout:
-                self.log_signal.emit(result.stdout)
-            if result.stderr:
-                self.log_signal.emit(f"Ошибка в {script_name}:\n{result.stderr}")
-        self.log_signal.emit(f"--- {script_name} завершён с кодом {result.returncode} ---\n")
-        return result
+        self.start_button.pack(fill=tk.X, pady=5)
 
-    def run(self):
-        # Этап 1: параллельный парсинг всех 10 источников через parser.py
-        tg_arg = ",".join(self.tg_groups) if self.tg_groups else ""
-        vk_arg = ",".join(self.vk_groups) if self.vk_groups else ""
+        # --- Лог ---
+        self.log_output = scrolledtext.ScrolledText(main_frame, height=15, state=tk.DISABLED)
+        self.log_output.pack(fill=tk.BOTH, expand=True)
 
-        parser_args = []
-        if tg_arg:
-            parser_args += ["--tg", tg_arg]
-        if vk_arg:
-            parser_args += ["--vk", vk_arg]
+    def append_log(self, text):
+        """Потокобезопасная запись в лог."""
+        def _append():
+            self.log_output.config(state=tk.NORMAL)
+            self.log_output.insert(tk.END, text)
+            self.log_output.see(tk.END)
+            self.log_output.config(state=tk.DISABLED)
+        self.root.after(0, _append)
 
-        self.run_script("parser.py", parser_args)
-
-        self.log_signal.emit("\nПарсинг завершён. Переходим к аналитике.\n")
-
-        # Этап 2: аналитика
-        self.run_script("analytics.py")
-        self.run_script("analytics.py", ["--input", "totals", "--output", "networks_analytics"])
-
-        # Этап 3: визуализация
-        subprocess.run(["python3", "visualization.py"])
-
-        self.finished_signal.emit()
-
-
-class MainWindow(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Анализ данных из 10 источников")
-        self.setMinimumWidth(600)
-        layout = QVBoxLayout()
-
-        # --- Telegram группы (текстовое поле) ---
-        tg_group = QGroupBox("Telegram-группы")
-        tg_layout = QVBoxLayout()
-        tg_layout.addWidget(QLabel("Введите названия групп через запятую:"))
-        self.tg_input = QLineEdit()
-        self.tg_input.setPlaceholderText("Например: Mash, Фонтанка SPB Online, РИА Новости")
-        tg_layout.addWidget(self.tg_input)
-        tg_group.setLayout(tg_layout)
-        layout.addWidget(tg_group)
-
-        # --- VK группы (текстовое поле) ---
-        vk_group = QGroupBox("VK-группы")
-        vk_layout = QVBoxLayout()
-        vk_layout.addWidget(QLabel("Введите short_name групп через запятую:"))
-        self.vk_input = QLineEdit()
-        self.vk_input.setPlaceholderText("Например: kpru, nws_ru, rt_russian, ndnews24, vesti")
-        vk_layout.addWidget(self.vk_input)
-        vk_group.setLayout(vk_layout)
-        layout.addWidget(vk_group)
-
-        # --- Информация о дополнительных источниках ---
-        info_group = QGroupBox("Автоматические источники (8 шт.)")
-        info_layout = QVBoxLayout()
-        sources_label = QLabel(
-            "RBC, VC.ru, Habr, Lenta.ru, ТАСС, Коммерсантъ, Газета.ру, Известия\n"
-            "Эти источники парсятся автоматически при запуске."
-        )
-        info_layout.addWidget(sources_label)
-        info_group.setLayout(info_layout)
-        layout.addWidget(info_group)
-
-        self.start_button = QPushButton("Запустить (10 источников параллельно)")
-        layout.addWidget(self.start_button)
-
-        self.log_output = QTextEdit()
-        self.log_output.setReadOnly(True)
-        layout.addWidget(self.log_output)
-
-        self.setLayout(layout)
-        self.start_button.clicked.connect(self.start_pipeline)
+    def on_finish(self):
+        """Вызывается по завершении пайплайна."""
+        self.root.after(0, lambda: self.start_button.config(state=tk.NORMAL))
 
     def start_pipeline(self):
-        tg_text = self.tg_input.text().strip()
-        vk_text = self.vk_input.text().strip()
+        tg_text = self.tg_input.get().strip()
+        vk_text = self.vk_input.get().strip()
 
         tg_groups = [g.strip() for g in tg_text.split(",") if g.strip()] if tg_text else []
         vk_groups = [g.strip() for g in vk_text.split(",") if g.strip()] if vk_text else []
 
-        self.log_output.clear()
-        self.log_output.append(f"Telegram группы: {tg_groups}")
-        self.log_output.append(f"VK группы: {vk_groups}")
-        self.log_output.append(f"+ 8 автоматических источников\n")
+        # Очистка лога
+        self.log_output.config(state=tk.NORMAL)
+        self.log_output.delete("1.0", tk.END)
+        self.log_output.config(state=tk.DISABLED)
 
-        self.worker = PipelineWorker(tg_groups, vk_groups)
-        self.worker.log_signal.connect(self.update_log)
-        self.worker.finished_signal.connect(self.pipeline_finished)
-        self.start_button.setEnabled(False)
-        self.worker.start()
+        self.append_log(f"Telegram группы: {tg_groups}\n")
+        self.append_log(f"VK группы: {vk_groups}\n")
+        self.append_log("+ 8 автоматических источников\n\n")
 
-    def update_log(self, text):
-        self.log_output.append(text)
+        self.start_button.config(state=tk.DISABLED)
 
-    def pipeline_finished(self):
-        self.log_output.append("=== Все скрипты завершены ===")
-        self.start_button.setEnabled(True)
+        # Запуск в фоновом потоке, чтобы GUI не зависал
+        t = threading.Thread(
+            target=run_pipeline,
+            args=(tg_groups, vk_groups, self.append_log, self.on_finish),
+            daemon=True
+        )
+        t.start()
 
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec_())
+    root = tk.Tk()
+    app = MainWindow(root)
+    root.mainloop()

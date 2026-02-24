@@ -1,6 +1,5 @@
 httpx
 feedparser
-PyQt5
 requests
 pandas
 beautifulsoup4
